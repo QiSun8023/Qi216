@@ -208,7 +208,7 @@ dns:
     "geosite:cn,private,apple":
       - https://doh.pub/dns-query
       - https://dns.alidns.com/dns-query
-    "geosite:category-ads-all": rcode://success
+#    "geosite:category-ads-all": rcode://success
     "geoip:google":
       - https://dns.google/dns-query
       - https://dns.cloudflare.com/dns-query
