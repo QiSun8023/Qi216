@@ -18,14 +18,6 @@ proxy-providers:
       lazy: false
       url: http://cp.cloudflare.com/generate_204     # 健康检查的目标URL，返回204状态码代表无内容，用于快速检查网络连通性
       
-geodata-mode: true
-geodata-loader: standard
-find-process-mode: strict
-tcp-concurrent: true
-interface-name: br0
-global-client-fingerprint: chrome
-keep-alive-interval: 15
-unified-delay: true
 geox-url:
   geoip: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
   geosite: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
@@ -33,8 +25,7 @@ geox-url:
   asn: "https://github.moeyy.xyz/https://github.com/Loyalsoldier/geoip/blob/release/GeoLite2-ASN.mmdb"
 geo-auto-update: true # 是否自动更新 geo
 geo-update-interval: 24
-global-ua: clash.meta
-etag-support: true
+
 experimental:
   ignore-resolve-fail: true
   sniff-tls-sni: true
