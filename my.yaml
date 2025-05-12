@@ -7,15 +7,46 @@ external-controller: '127.0.0.1:9090'
 unified-delay: true
 tcp-concurrent: true
 proxy-providers:
-  my_provider:
-    type: http
+  my_provider:                             # 名为“my_provider”的代理组
+    type: http                             # 代理类型为HTTP
     url: "https://xn--cp3a08l.com/api/v1/client/subscribe?token=ed378e6ebe77e6b99efeea24c7dfa070"  # 👈 替换为你的 Clash 格式订阅链接
-    interval: 3600                          # 每小时刷新一次
+    interval: 43200                        # 订阅更新的时间间隔，单位为秒，这里为一天（86400秒）
     path: ./providers/my_provider.yaml     # 本地缓存路径（相对路径）
-    health-check:
-      enable: true
+    health-check:                          # 健康检查配置，用于定期检查代理的可用性
+      enable: true                         # 启用健康检查
       interval: 600
-      url: http://cp.cloudflare.com/generate_204
+      lazy: false
+      url: http://cp.cloudflare.com/generate_204     # 健康检查的目标URL，返回204状态码代表无内容，用于快速检查网络连通性
+      
+geodata-mode: true
+geodata-loader: standard
+find-process-mode: strict
+tcp-concurrent: true
+interface-name: br0
+global-client-fingerprint: chrome
+keep-alive-interval: 15
+unified-delay: true
+geox-url:
+  geoip: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
+  geosite: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
+  mmdb: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb"
+  asn: "https://github.moeyy.xyz/https://github.com/Loyalsoldier/geoip/blob/release/GeoLite2-ASN.mmdb"
+geo-auto-update: true # 是否自动更新 geo
+geo-update-interval: 24
+global-ua: clash.meta
+etag-support: true
+experimental:
+  ignore-resolve-fail: true
+  sniff-tls-sni: true
+  udp-fallback-match: true
+profile:
+  store-fake-ip: true
+  store-selected: true
+  tracing: true
+ipv6: false      
+      
+      
+
 hosts:
   mtalk.google.com: 108.177.125.188
   raw.githubusercontent.com: 151.101.76.133
@@ -208,6 +239,7 @@ dns:
     "geosite:cn,private,apple":
       - https://doh.pub/dns-query
       - https://dns.alidns.com/dns-query
+    "geosite:category-ads-all": rcode://success
     "geoip:google":
       - https://dns.google/dns-query
       - https://dns.cloudflare.com/dns-query
@@ -1392,223 +1424,217 @@ rule-providers:                   # 规则提供者，定义从外部获取规�
   ChinaDNS:                        # ChinaDNS规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/shihairu22/dns/main/ChinaDNS.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/ChinaDNS.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_ChinaDNS.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   PT-DIRECT2:                         # PT-DIRECT规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: domain              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/shihairu22/dns/main/PT-DIRECT2.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/PT-DIRECT2.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_PT-DIRECT2.yaml  # 本地存储路径（修正路径名称）
     interval: 86400                  # 更新间隔为86400秒（即每天）
   ForeignDNS:                        # ForeignDNS规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/shihairu22/dns/main/ForeignDNS.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/ForeignDNS.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_ForeignDNS.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   Further:                  # CloudflareDomain规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/shihairu22/dns/main/Further.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/Further.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_Further.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   NTP-Service:                       # NTP-Service规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/xuanranran/Clash/main/yaml/NTP-Service.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/NTP-Service.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_NTP-Service.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   Discord_IP-CIDR:                   # Discord_IP-CIDR规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/xuanranran/Clash/main/yaml/Discord_IP-CIDR.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/Discord_IP-CIDR.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_Discord_IP-CIDR.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   Mail:                              # Mail规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Mail/Mail.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/Mail.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_Mail.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   AppleMail:                         # AppleMail规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/AppleMail/AppleMail.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/AppleMail.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_AppleMail.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   GameDownloadCN:                    # GameDownloadCN规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Game/GameDownloadCN/GameDownloadCN.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/GameDownloadCN.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_GameDownloadCN.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   GameDownload:                      # GameDownload规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Game/GameDownload/GameDownload.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/GameDownload.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_GameDownload.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   GamesDownload:                     # GamesDownload规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/xuanranran/Clash/main/yaml/GamesDownload.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/GamesDownload.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_GamesDownload.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   Classic:                           # Classic规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Classic/Classic.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/Classic.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_Classic.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   Game:                              # Game规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Game/Game.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/Game.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_Game.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   GameRule:                          # GameRule规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/xuanranran/Clash/main/yaml/GameRule.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/GameRule.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_GameRule.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   chat:                              # chat规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/xuanranran/Clash/main/yaml/chat.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/chat.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_chat.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   KoreaMedia:                        # KoreaMedia规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/xuanranran/Clash/main/yaml/KoreaMedia.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/KoreaMedia.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_KoreaMedia.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   LineTV:                            # LineTV规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/LineTV/LineTV.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/LineTV.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_LineTV.yaml  # 本地存储路径
-    interval: 86400                  # 更新间隔为86400秒（即每天）
-  friDay:                            # friDay规则集提供者
-    type: http                       # 规则获取方式为HTTP
-    behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/friDay/friDay.yaml  # 规则集的下载链接
-    path: ./providers/rule-provider_friDay.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   Japan_Media:                       # Japan_Media规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/xuanranran/Clash/main/yaml/Japan_Media.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/Japan_Media.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_Japan_Media.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   ParamountPlus:                     # ParamountPlus规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ParamountPlus/ParamountPlus.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/ParamountPlus.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_ParamountPlus.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   FuboTV:                            # FuboTV规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/FuboTV/FuboTV.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/FuboTV.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_FuboTV.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   Peacock:                           # Peacock规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Peacock/Peacock.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/Peacock.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_Peacock.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   DiscoveryPlus:                     # DiscoveryPlus规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/DiscoveryPlus/DiscoveryPlus.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/DiscoveryPlus.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_DiscoveryPlus.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   NBA:                     # DiscoveryPlus规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/xuanranran/Clash/main/yaml/NBA.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/NBA.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_NBA.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   emby:                              # emby规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/xuanranran/Clash/main/yaml/emby.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/emby.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_emby.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   DAZN:                              # DAZN规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/DAZN/DAZN.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/DAZN.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_DAZN.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   iQIYI:                             # iQIYI规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/iQIYI/iQIYI.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/iQIYI.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_iQIYI.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   Qobuz:                             # Qobuz规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/xuanranran/Clash/main/yaml/Qobuz.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/Qobuz.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_Qobuz.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   AppleMusic:                            # AMusic规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/AppleMusic/AppleMusic.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/AppleMusic.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_AppleMusic.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   AMusic:                            # AMusic规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/xuanranran/Clash/main/yaml/AMusic.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/AMusic.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_AMusic.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   AppleTV:                           # AppleTV规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/AppleTV/AppleTV.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/AppleTV.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_AppleTV.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   iTunes:                            # iTunes规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/xuanranran/Clash/main/yaml/iTunes.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/iTunes.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_iTunes.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   GlobalMedia:                       # GlobalMedia规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GlobalMedia/GlobalMedia.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/GlobalMedia.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_GlobalMedia.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   ProxyGFWlist:                      # ProxyGFWlist规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/ProxyGFWlist.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/ProxyGFWlist.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_ProxyGFWlist.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   ChinaMedia:                        # ChinaMedia规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ChinaMedia/ChinaMedia.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/ChinaMedia.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_ChinaMedia.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   Lan:                               # Lan规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Lan/Lan.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/Lan.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_Lan.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
   Download:                          # Download规则集提供者
     type: http                       # 规则获取方式为HTTP
     behavior: classical              # 行为模式为 classical（经典模式）
-    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/Download.yaml  # 规则集的下载链接
+    url: https://raw.githubusercontent.com/SQQQQ-216/Qi216/refs/heads/main/Download.yaml  # 规则集的下载链接
     path: ./providers/rule-provider_Download.yaml  # 本地存储路径
     interval: 86400                  # 更新间隔为86400秒（即每天）
     
@@ -1663,7 +1689,6 @@ rules:
   - GEOSITE,kktv,KKTV                                 # 使用KKTV服务访问KKTV规则集中的域名
   - RULE-SET,LineTV,KKTV                               # 使用KKTV服务访问LineTV规则集中的域名
   - GEOSITE,bahamut,巴哈姆特                           # 使用巴哈姆特服务访问bahamut的域名
-  - RULE-SET,friDay,巴哈姆特                           # 使用巴哈姆特服务访问friDay规则集中的域名
   - GEOSITE,hamivideo,巴哈姆特                        # 使用巴哈姆特服务访问HamiVideo规则集中的域名
   - RULE-SET,Japan_Media,日本媒体                      # 使用日本媒体服务访问Japan_Media规则集中的域名
   - GEOSITE,youtube,YouTube                            # 使用YouTube服务访问youtube的域名
