@@ -9,7 +9,7 @@ tcp-concurrent: true
 proxy-providers:
   my_provider:                             # 名为“my_provider”的代理组
     type: http                             # 代理类型为HTTP
-    url: "https://xn--cp3a08l.com/api/v1/client/subscribe?token=ed378e6ebe77e6b99efeea24c7dfa070"  # 👈 替换为你的 Clash 格式订阅链接
+    url: "#替换为你的 Clash 格式订阅链接"  # 👈 替换为你的 Clash 格式订阅链接
     interval: 43200                        # 订阅更新的时间间隔，单位为秒，这里为一天（86400秒）
     path: ./providers/my_provider.yaml     # 本地缓存路径（相对路径）
     health-check:                          # 健康检查配置，用于定期检查代理的可用性
